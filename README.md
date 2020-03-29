@@ -4,12 +4,6 @@ Wrapper based on php-amqplib library to incorporate messaging in your Yii2 appli
 
 This documentation is relevant for the version 2.\*, which require PHP version >=7.0. For legacy PHP applications >=5.4 please use [previous version of this extension](https://github.com/byinti/yii2-rabbitmq/blob/master/README_v1.md).
 
-[![Latest Stable Version](https://poser.pugx.org/byinti/yii2-rabbitmq/v/stable)](https://packagist.org/packages/byinti/yii2-rabbitmq)
-[![License](https://poser.pugx.org/byinti/yii2-rabbitmq/license)](https://packagist.org/packages/byinti/yii2-rabbitmq)
-[![Build Status](https://travis-ci.org/byinti/yii2-rabbitmq.svg?branch=master)](https://travis-ci.org/byinti/yii2-rabbitmq)
-[![Coverage Status](https://coveralls.io/repos/github/byinti/yii2-rabbitmq/badge.svg?branch=master)](https://coveralls.io/github/byinti/yii2-rabbitmq?branch=master)
-[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fbyinti%2Fyii2-rabbitmq.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fbyinti%2Fyii2-rabbitmq?ref=badge_shield)
-
 Installation
 ------------
 The preferred way to install this extension is through [composer](http://getcomposer.org/download/).
@@ -381,7 +375,3 @@ Since version 1.\* this extension was completely rewritten internally and can be
 - New console commands added to manipulate with routing schema
 - All data types are supported for message payload
 - Consumer handles control signals in a predictable manner
-
-
-## License
-[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fbyinti%2Fyii2-rabbitmq.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Fbyinti%2Fyii2-rabbitmq?ref=badge_large)
