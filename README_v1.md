@@ -2,8 +2,8 @@ RabbitMQ Extension for Yii2
 ==================
 Wrapper based on php-amqplib to incorporate messaging in your Yii2 application via RabbitMQ. Inspired by RabbitMqBundle for Symfony framework which is awesome.
 
-[![Latest Stable Version](https://poser.pugx.org/mikemadisonweb/yii2-rabbitmq/v/stable)](https://packagist.org/packages/mikemadisonweb/yii2-rabbitmq)
-[![License](https://poser.pugx.org/mikemadisonweb/yii2-rabbitmq/license)](https://packagist.org/packages/mikemadisonweb/yii2-rabbitmq)
+[![Latest Stable Version](https://poser.pugx.org/byinti/yii2-rabbitmq/v/stable)](https://packagist.org/packages/byinti/yii2-rabbitmq)
+[![License](https://poser.pugx.org/byinti/yii2-rabbitmq/license)](https://packagist.org/packages/byinti/yii2-rabbitmq)
 
 Installation
 ------------
@@ -11,11 +11,11 @@ The preferred way to install this extension is through [composer](http://getcomp
 
 Either run
 ```
-php composer.phar require mikemadisonweb/yii2-rabbitmq
+php composer.phar require byinti/yii2-rabbitmq
 ```
 or add
 ```json
-"mikemadisonweb/yii2-rabbitmq": "^1.7.0"
+"byinti/yii2-rabbitmq": "^1.7.0"
 ```
 to the require section of your `composer.json` file.
 
@@ -29,7 +29,7 @@ return [
     'components'    => [
         // ...
         'rabbitmq'  => [
-            'class' => 'mikemadisonweb\rabbitmq\Configuration',
+            'class' => 'byinti\rabbitmq\Configuration',
             'connections' => [
                 'default' => [
                     'host' => '127.0.0.1',
@@ -74,13 +74,13 @@ return [
     ],
     // should be in console.php
     'controllerMap' => [
-        'rabbitmq-consumer' => \mikemadisonweb\rabbitmq\controllers\ConsumerController::class,
-        'rabbitmq-producer' => \mikemadisonweb\rabbitmq\controllers\ProducerController::class,
+        'rabbitmq-consumer' => \byinti\rabbitmq\controllers\ConsumerController::class,
+        'rabbitmq-producer' => \byinti\rabbitmq\controllers\ProducerController::class,
     ],
     // ...
 ];
 ```
-To use this extension you should be familiar with the basic concepts of RabbitMQ. If you are not confident in your knowledge I suggest reading [this article](https://mikemadisonweb.github.io/2017/05/04/tldr-series-rabbitmq/).
+To use this extension you should be familiar with the basic concepts of RabbitMQ. If you are not confident in your knowledge I suggest reading [this article](https://byinti.github.io/2017/05/04/tldr-series-rabbitmq/).
 
 The 'callback' parameter can be a class name or a service name from [dependency injection container](http://www.yiiframework.com/doc-2.0/yii-di-container.html). Starting from Yii version 2.0.11 you can configure your container like this:
 ```php
@@ -150,7 +150,7 @@ return [
 ```
 Be aware that all queues are under the same exchange, it's up to you to set the correct routing for callbacks.
 #### Lifecycle events
-There are also couple of lifecycle events implemented: before_consume, after_consume, before_publish, after_publish. You can use them for any additional work you need to do before or after message been consumed/published. For example, reopen database connection for it not to be closed by timeout as a consumer is a long-running process: 
+There are also couple of lifecycle events implemented: before_consume, after_consume, before_publish, after_publish. You can use them for any additional work you need to do before or after message been consumed/published. For example, reopen database connection for it not to be closed by timeout as a consumer is a long-running process:
 ```php
 <?php
 // config/main.php
@@ -222,7 +222,7 @@ As the consumer worker will read messages from the queue, it executes a callback
 
 namespace components\rabbitmq;
 
-use mikemadisonweb\rabbitmq\components\ConsumerInterface;
+use byinti\rabbitmq\components\ConsumerInterface;
 use PhpAmqpLib\Message\AMQPMessage;
 
 class ImportDataConsumer implements ConsumerInterface
@@ -234,10 +234,10 @@ class ImportDataConsumer implements ConsumerInterface
     public function execute(AMQPMessage $msg)
     {
         $data = unserialize($msg->body);
-        
+
         if ($this->isValid($data)) {
             // Apply your business logic here
-            
+
             return ConsumerInterface::MSG_ACK;
         }
     }
@@ -250,11 +250,11 @@ $producer = \Yii::$container->get(sprintf('rabbit_mq.producer.%s', 'import_data'
 $msg = serialize(['dataset_id' => $dataset->id, 'linked_datasets' => []]);
 $producer->publish($msg, 'import_data');
 ```
-This template for a service name 'rabbit_mq.producer.%s' is also available as a constant mikemadisonweb\rabbitmq\components\BaseRabbitMQ::PRODUCER_SERVICE_NAME. It's needed because producer classes are lazy loaded, that means they are only got created on demand. Likewise the Connection class also got created on demand, that means a connection to RabbitMQ would not be established on each request.
+This template for a service name 'rabbit_mq.producer.%s' is also available as a constant byinti\rabbitmq\components\BaseRabbitMQ::PRODUCER_SERVICE_NAME. It's needed because producer classes are lazy loaded, that means they are only got created on demand. Likewise the Connection class also got created on demand, that means a connection to RabbitMQ would not be established on each request.
 
 Options
 -------------
-All default options are taken from php-amqplib library. Complete explanation about options, their defaults and valuable details can be found in [AMQP 0-9-1 Reference Guide](http://www.rabbitmq.com/amqp-0-9-1-reference.html). 
+All default options are taken from php-amqplib library. Complete explanation about options, their defaults and valuable details can be found in [AMQP 0-9-1 Reference Guide](http://www.rabbitmq.com/amqp-0-9-1-reference.html).
 
 #####  Exchange
 For example, to declare an exchange you should provide name and type for it.
@@ -274,18 +274,18 @@ ticket | no | integer | null | Access ticket
 
 Good use-case of the `arguments` parameter usage can be a creation of a [dead-letter-exchange](https://github.com/php-amqplib/php-amqplib/blob/master/demo/queue_arguments.php#L17).
 #####  Queue
-As for the queue declaration, all parameters are optional. Even if you does not provide a name for your queue server will generate unique name for you: 
+As for the queue declaration, all parameters are optional. Even if you does not provide a name for your queue server will generate unique name for you:
 
 parameter | required | type | default | comments
 --- | --- | --- | --- | ---
-name | no | string | '' | The queue name can be empty, or a sequence of these characters: letters, digits, hyphen, underscore, period, or colon. 
+name | no | string | '' | The queue name can be empty, or a sequence of these characters: letters, digits, hyphen, underscore, period, or colon.
 declare | no | boolean | true | Whether to declare a queue on sending or consuming messages.
 passive | no | boolean | false | If set to true, the server will reply with Declare-Ok if the queue already exists with the same name, and raise an error if not.
 durable | no | boolean | false | Durable queues remain active when a server restarts. Non-durable queues (transient queues) are purged if/when a server restarts.
-auto_delete | no | boolean | true | If set to true, the queue is deleted when all consumers have finished using it. 
+auto_delete | no | boolean | true | If set to true, the queue is deleted when all consumers have finished using it.
 exclusive | no | boolean | false | Exclusive queues may only be accessed by the current connection, and are deleted when that connection closes. Passive declaration of an exclusive queue by other connections are not allowed.
 nowait | no | boolean | false | Client may send next request immediately after sending the first one, no waiting for reply is required
-arguments | false | array | null | A set of arguments for the declaration. 
+arguments | false | array | null | A set of arguments for the declaration.
 ticket | no | integer | null | Access ticket
 
-Beware that not all these options are allowed to be changed 'on-the-fly', in other words after queue or exchange had already been created. Otherwise, you will receive an error. 
+Beware that not all these options are allowed to be changed 'on-the-fly', in other words after queue or exchange had already been created. Otherwise, you will receive an error.

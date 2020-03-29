@@ -2,13 +2,13 @@ RabbitMQ Extension for Yii2
 ==================
 Wrapper based on php-amqplib library to incorporate messaging in your Yii2 application via RabbitMQ. Inspired by RabbitMqBundle for Symfony framework.
 
-This documentation is relevant for the version 2.\*, which require PHP version >=7.0. For legacy PHP applications >=5.4 please use [previous version of this extension](https://github.com/mikemadisonweb/yii2-rabbitmq/blob/master/README_v1.md).
+This documentation is relevant for the version 2.\*, which require PHP version >=7.0. For legacy PHP applications >=5.4 please use [previous version of this extension](https://github.com/byinti/yii2-rabbitmq/blob/master/README_v1.md).
 
-[![Latest Stable Version](https://poser.pugx.org/mikemadisonweb/yii2-rabbitmq/v/stable)](https://packagist.org/packages/mikemadisonweb/yii2-rabbitmq)
-[![License](https://poser.pugx.org/mikemadisonweb/yii2-rabbitmq/license)](https://packagist.org/packages/mikemadisonweb/yii2-rabbitmq)
-[![Build Status](https://travis-ci.org/mikemadisonweb/yii2-rabbitmq.svg?branch=master)](https://travis-ci.org/mikemadisonweb/yii2-rabbitmq)
-[![Coverage Status](https://coveralls.io/repos/github/mikemadisonweb/yii2-rabbitmq/badge.svg?branch=master)](https://coveralls.io/github/mikemadisonweb/yii2-rabbitmq?branch=master)
-[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fmikemadisonweb%2Fyii2-rabbitmq.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fmikemadisonweb%2Fyii2-rabbitmq?ref=badge_shield)
+[![Latest Stable Version](https://poser.pugx.org/byinti/yii2-rabbitmq/v/stable)](https://packagist.org/packages/byinti/yii2-rabbitmq)
+[![License](https://poser.pugx.org/byinti/yii2-rabbitmq/license)](https://packagist.org/packages/byinti/yii2-rabbitmq)
+[![Build Status](https://travis-ci.org/byinti/yii2-rabbitmq.svg?branch=master)](https://travis-ci.org/byinti/yii2-rabbitmq)
+[![Coverage Status](https://coveralls.io/repos/github/byinti/yii2-rabbitmq/badge.svg?branch=master)](https://coveralls.io/github/byinti/yii2-rabbitmq?branch=master)
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fbyinti%2Fyii2-rabbitmq.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fbyinti%2Fyii2-rabbitmq?ref=badge_shield)
 
 Installation
 ------------
@@ -16,11 +16,11 @@ The preferred way to install this extension is through [composer](http://getcomp
 
 Either run
 ```
-php composer.phar require mikemadisonweb/yii2-rabbitmq
+php composer.phar require byinti/yii2-rabbitmq
 ```
 or add
 ```json
-"mikemadisonweb/yii2-rabbitmq": "^2.2.0"
+"byinti/yii2-rabbitmq": "^2.2.0"
 ```
 to the require section of your `composer.json` file.
 
@@ -34,7 +34,7 @@ return [
     'components'    => [
         // ...
         'rabbitmq' => [
-            'class' => \mikemadisonweb\rabbitmq\Configuration::class,
+            'class' => \byinti\rabbitmq\Configuration::class,
             'connections' => [
                 [
                     // You can pass these parameters as a single `url` option: https://www.rabbitmq.com/uri-spec.html
@@ -44,7 +44,7 @@ return [
                     'password' => 'YOUR_PASSWORD',
                     'vhost' => '/',
                 ]
-                // When multiple connections is used you need to specify a `name` option for each one and define them in producer and consumer configuration blocks 
+                // When multiple connections is used you need to specify a `name` option for each one and define them in producer and consumer configuration blocks
             ],
             'exchanges' => [
                 [
@@ -90,7 +90,7 @@ return [
     ],
 ];
 ```
-To use this extension you should be familiar with the basic concepts of RabbitMQ. If you are not confident in your knowledge I suggest reading [this article](https://mikemadisonweb.github.io/2017/05/04/tldr-series-rabbitmq/).
+To use this extension you should be familiar with the basic concepts of RabbitMQ. If you are not confident in your knowledge I suggest reading [this article](https://byinti.github.io/2017/05/04/tldr-series-rabbitmq/).
 
 The 'callback' parameter can be a class name or a service name from [dependency injection container](http://www.yiiframework.com/doc-2.0/yii-di-container.html). Starting from Yii version 2.0.11 you can configure your container like this:
 ```php
@@ -119,7 +119,7 @@ If you need several consumers you can list respective entries in the configurati
 
 Be sure that all queues and exchanges are defined in corresponding bindings, it's up to you to set up correct message routing.
 #### Lifecycle events
-There are also some lifecycle events implemented: before_consume, after_consume, before_publish, after_publish. You can use them for any additional work you need to do before or after message been consumed/published. For example, make sure that Yii knows the database connection has been closed by a timeout as a consumer is a long-running process: 
+There are also some lifecycle events implemented: before_consume, after_consume, before_publish, after_publish. You can use them for any additional work you need to do before or after message been consumed/published. For example, make sure that Yii knows the database connection has been closed by a timeout as a consumer is a long-running process:
 ```php
 <?php
 // config/main.php
@@ -199,7 +199,7 @@ By default extension configured in auto-declare mode, which means that on every 
 
 Usage
 -------------
-As the consumer worker will read messages from the queue, execute a callback method and pass a message to it. 
+As the consumer worker will read messages from the queue, execute a callback method and pass a message to it.
 #### Consume
 In order a class to become a callback it should implement ConsumerInterface:
 ```php
@@ -207,7 +207,7 @@ In order a class to become a callback it should implement ConsumerInterface:
 
 namespace components\rabbitmq;
 
-use mikemadisonweb\rabbitmq\components\ConsumerInterface;
+use byinti\rabbitmq\components\ConsumerInterface;
 use PhpAmqpLib\Message\AMQPMessage;
 
 class YourConsumer implements ConsumerInterface
@@ -220,7 +220,7 @@ class YourConsumer implements ConsumerInterface
     {
         $data = $msg->body;
         // Apply your business logic here
-        
+
         return ConsumerInterface::MSG_ACK;
     }
 }
@@ -350,20 +350,20 @@ ticket | no | integer | null | Access ticket
 
 Good use-case of the `arguments` parameter usage can be a creation of a [dead-letter-exchange](https://github.com/php-amqplib/php-amqplib/blob/master/demo/queue_arguments.php#L17).
 #####  Queue
-As for the queue declaration, all parameters are optional. Even if you do not provide a name for your queue server will generate a unique name for you: 
+As for the queue declaration, all parameters are optional. Even if you do not provide a name for your queue server will generate a unique name for you:
 
 parameter | required | type | default | comments
 --- | --- | --- | --- | ---
-name | no | string | '' | The queue name can be empty, or a sequence of these characters: letters, digits, hyphen, underscore, period, or colon. 
+name | no | string | '' | The queue name can be empty, or a sequence of these characters: letters, digits, hyphen, underscore, period, or colon.
 passive | no | boolean | false | If set to true, the server will reply with Declare-Ok if the queue already exists with the same name, and raise an error if not.
 durable | no | boolean | false | Durable queues remain active when a server restarts. Non-durable queues (transient queues) are purged if/when a server restarts.
-auto_delete | no | boolean | true | If set to true, the queue is deleted when all consumers have finished using it. 
+auto_delete | no | boolean | true | If set to true, the queue is deleted when all consumers have finished using it.
 exclusive | no | boolean | false | Exclusive queues may only be accessed by the current connection, and are deleted when that connection closes. Passive declaration of an exclusive queue by other connections are not allowed.
 nowait | no | boolean | false | Client may send next request immediately after sending the first one, no waiting for the reply is required
-arguments | false | array | null | A set of arguments for the declaration. 
+arguments | false | array | null | A set of arguments for the declaration.
 ticket | no | integer | null | Access ticket
 
-A complete explanation about options, their defaults, and valuable details can be found in [AMQP 0-9-1 Reference Guide](http://www.rabbitmq.com/amqp-0-9-1-reference.html). 
+A complete explanation about options, their defaults, and valuable details can be found in [AMQP 0-9-1 Reference Guide](http://www.rabbitmq.com/amqp-0-9-1-reference.html).
 
 Beware that not all these options are allowed to be changed 'on-the-fly', in other words after queue or exchange had already been created. Otherwise, you will receive an error.
 
@@ -384,4 +384,4 @@ Since version 1.\* this extension was completely rewritten internally and can be
 
 
 ## License
-[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fmikemadisonweb%2Fyii2-rabbitmq.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Fmikemadisonweb%2Fyii2-rabbitmq?ref=badge_large)
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fbyinti%2Fyii2-rabbitmq.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Fbyinti%2Fyii2-rabbitmq?ref=badge_large)
